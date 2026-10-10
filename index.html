@@ -96,6 +96,8 @@
     <code>next</code>, <code>twin</code>, <code>vertex</code>, <code>edge</code>, and <code>face</code> pointers. I also
     updated the representative half-edge stored by every adjacent element. The operation allocates or deletes nothing
     and ignores boundary edges. Labeling the local neighborhood before coding was the most useful debugging technique.
+    I also tested several flips in the same region and checked that no holes appeared and that the mesh element counts
+    stayed unchanged, which helped catch incorrect pointer assignments.
   </p>
   <div class="grid">
     <figure><img src="assets/part4-teapot-before.png" alt="Teapot before edge flips"><figcaption>Teapot before local edge flips.</figcaption></figure>
@@ -108,13 +110,18 @@
     local elements and allocated exactly one vertex, three edges, six half-edges, and two faces. I placed the new vertex
     at the average of the original endpoints and explicitly assigned every pointer in the new neighborhood. Boundary
     edges are ignored. For Loop subdivision, the two pieces along the original edge are marked old, while the new
-    cross-triangle edges are marked new.
+    cross-triangle edges are marked new. To debug the operation, I checked the four resulting face cycles and then
+    alternated splits and flips on nearby edges to make sure the mesh stayed connected.
+  </p>
+  <p>
+    The first image below is the starting mesh for both comparisons. The second image shows the result of an edge
+    split by itself, while the third image shows the same region after a combination of edge splits and edge flips.
   </p>
   <div class="grid">
-    <figure><img src="assets/part5-before.png" alt="Mesh before edge split"><figcaption>Before splitting the interior edge.</figcaption></figure>
+    <figure><img src="assets/part5-before.png" alt="Mesh before edge operations"><figcaption>Before the edge split and before the combined split-and-flip sequence.</figcaption></figure>
     <figure><img src="assets/part5-after.png" alt="Mesh after edge split"><figcaption>After the split: one midpoint and four triangles.</figcaption></figure>
   </div>
-  <figure><img src="assets/part5-split-flip-combination.png" alt="Combined splits and flips"><figcaption>A local region after a combination of edge splits and flips.</figcaption></figure>
+  <figure><img src="assets/part5-split-flip-combination.png" alt="Combined splits and flips"><figcaption>The same starting region after a combination of edge splits and flips.</figcaption></figure>
 
   <h3>Part 6: Loop subdivision for mesh upsampling</h3>
   <p>
